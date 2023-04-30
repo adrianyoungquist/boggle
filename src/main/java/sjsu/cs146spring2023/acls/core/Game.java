@@ -16,8 +16,8 @@ public abstract class Game {
     }
 
     public void setDictionaryTrie(DictionaryTrie dictionaryTrie) {
-       this.dictionaryTrie = dictionaryTrie;
-       board.dictionaryTrie = dictionaryTrie;
+        this.dictionaryTrie = dictionaryTrie;
+        board.dictionaryTrie = dictionaryTrie;
     }
 
     public Board getBoard() {
@@ -56,6 +56,7 @@ public abstract class Game {
     public abstract boolean hasFound(String word);
 
     public abstract int scoreWord(String word);
+
     public abstract int addWord(String word);
 
 

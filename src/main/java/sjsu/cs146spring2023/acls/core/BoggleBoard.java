@@ -6,7 +6,8 @@ public class BoggleBoard extends Board {
     public static final int DEFAULT_DIM = 4;
 
     ArrayList<String> words;
-    int rows; int cols;
+    int rows;
+    int cols;
 
     public BoggleBoard() {
         this(DEFAULT_DIM, DEFAULT_DIM);
@@ -83,8 +84,7 @@ public class BoggleBoard extends Board {
             for (int c = 0; c < 4; c++) {
                 if (board[r][c] == 'q') {
                     sb.append("Qu  ");
-                }
-                else {
+                } else {
                     sb.append(Character.toUpperCase(board[r][c])).append("   ");
                 }
             }

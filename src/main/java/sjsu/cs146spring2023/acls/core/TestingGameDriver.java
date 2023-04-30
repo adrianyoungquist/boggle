@@ -1,9 +1,5 @@
 package sjsu.cs146spring2023.acls.core;
 
-import sjsu.cs146spring2023.acls.core.Game;
-import sjsu.cs146spring2023.acls.core.TestingDictionaryTrie;
-import sjsu.cs146spring2023.acls.core.TestingGame;
-
 public class TestingGameDriver {
     public static void main(String[] args) {
         Game game = new TestingGame();

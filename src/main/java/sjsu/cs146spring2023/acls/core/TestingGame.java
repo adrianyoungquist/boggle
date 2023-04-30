@@ -30,7 +30,7 @@ public class TestingGame extends Game {
         if (!dictionaryTrie.contains(word)) {
             return -1;
         }
-        if (!board.wordIsValid(word))  {
+        if (!board.wordIsValid(word)) {
             return -2;
         }
         return word.length();

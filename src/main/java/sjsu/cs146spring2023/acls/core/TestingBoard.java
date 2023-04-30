@@ -5,7 +5,8 @@ import java.util.Collections;
 
 public class TestingBoard extends Board {
     ArrayList<String> words;
-    int rows; int cols;
+    int rows;
+    int cols;
     boolean solved;
 
     public TestingBoard() {
@@ -15,6 +16,7 @@ public class TestingBoard extends Board {
         words = new ArrayList<>();
         solved = false;
     }
+
     @Override
     public boolean setLettersFromList(ArrayList<Character> letters) {
         return true;

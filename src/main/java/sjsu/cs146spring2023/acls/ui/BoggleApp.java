@@ -6,7 +6,7 @@ import sjsu.cs146spring2023.acls.core.Game;
 import sjsu.cs146spring2023.acls.core.TestingDictionaryTrie;
 import sjsu.cs146spring2023.acls.core.TestingGame;
 
-public class BoggleApp extends Application{
+public class BoggleApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.show();
