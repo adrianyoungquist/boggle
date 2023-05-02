@@ -3,7 +3,7 @@ package sjsu.cs146spring2023.acls.core;
 public class TestingGameDriver {
     public static void main(String[] args) {
         Game game = new TestingGame();
-        game.setDictionaryTrie(new TestingDictionaryTrie());
+        game.setDictionaryTrie(new DictionaryTrie());
         game.makeRandomBoard();
         game.solveBoard();
         System.out.println(game.getBoard());

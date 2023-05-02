@@ -14,6 +14,7 @@ public class AlphabetTrie {
     }
 
     public static int getIndex(char c) {
+        c = Character.toLowerCase(c);
         return c - 'a';
     }
 
@@ -69,24 +70,26 @@ public class AlphabetTrie {
     }
 
     public boolean contains(String word) {
+        word = word.toLowerCase();
         Pair<AlphaTrieNode, Integer> foundPair = findLocation(word);
         return foundPair.value == word.length() && foundPair.key.isWord();
     }
 
     public boolean containsPrefix(String prefix) {
+        prefix = prefix.toLowerCase();
         Pair<AlphaTrieNode, Integer> foundPair = findLocation(prefix);
         return (foundPair.value == prefix.length());
     }
 
     public AlphaTrieNode getPrefix(String prefix) {
+        prefix = prefix.toLowerCase();
         return findLocation(prefix).key;
     }
 
     public AlphaTrieNode insert(String word) {
+        word = word.toLowerCase();
         Pair<AlphaTrieNode, Integer> foundPair = findLocation(word);
-        System.out.println("word:" + word + "\n" + foundPair);
         if (foundPair.value == word.length()) { // full word
-            System.out.println("here");
             if (!foundPair.key.isWord()) {
                 wordCount++;
                 foundPair.key.setIsWord(true);
@@ -97,6 +100,7 @@ public class AlphabetTrie {
     }
 
     public boolean remove(String word) { // soft delete
+        word = word.toLowerCase();
         Pair<AlphaTrieNode, Integer> foundPair = findLocation(word);
         if (foundPair.value < word.length()) {
             return false;
@@ -149,6 +153,7 @@ public class AlphabetTrie {
     private Pair<AlphaTrieNode, Integer> findLocation(String toFind) {
         // returns the node that is the word or is where the rest of the word would go
         // and how many letters match (so one more than the last index)
+        toFind = toFind.toLowerCase();
 
         int index = 0;
         AlphaTrieNode node = root;
@@ -222,7 +227,7 @@ class AlphaTrieNode {
     protected AlphaTrieNode[] children;
 
     public AlphaTrieNode() {
-        this('a', false, null);
+        this('-', false, null);
 
     }
 
@@ -235,6 +240,7 @@ class AlphaTrieNode {
     }
 
     public AlphaTrieNode(char value, boolean isWord, AlphaTrieNode parent) {
+        value = Character.toLowerCase(value);
         this.value = value;
         this.isWord = isWord;
         this.parent = parent;
@@ -260,7 +266,7 @@ class AlphaTrieNode {
     }
 
     public void setValue(char value) {
-        this.value = value;
+        this.value = Character.toLowerCase(value);
     }
 
     public boolean isWord() {
@@ -272,6 +278,7 @@ class AlphaTrieNode {
     }
 
     public AlphaTrieNode getChildAtChar(char c) {
+        c = Character.toLowerCase(c);
         return children[c - 'a'];
     }
 
