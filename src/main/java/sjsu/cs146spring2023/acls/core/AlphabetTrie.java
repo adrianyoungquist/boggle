@@ -65,7 +65,7 @@ public class AlphabetTrie {
         return size;
     }
 
-    public int getWordCount() {
+    public int wordCount() {
         return wordCount;
     }
 
