@@ -1,15 +1,16 @@
 package sjsu.cs146spring2023.acls.core;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class BoggleBoard extends Board {
     public static final int DEFAULT_DIM = 4;
+    public static final int DEFAULT_MIN_WORD_LENGTH = 3;
     private final Random rand;
-    protected ArrayList<String> words;
+    protected ArrayList<String> wordList;
     protected int dim; // assumes square
+    protected int minWordLength;
     protected int[] dieAtIndexList; // stores which die # is at location in grid
     /*
     Grid is arranged:
@@ -21,15 +22,23 @@ public class BoggleBoard extends Board {
     protected boolean classicDice;
     protected Dice dice;
 
+
     public BoggleBoard() {
+        this(DEFAULT_MIN_WORD_LENGTH);
+    }
+
+    public BoggleBoard(int minWordLength) {
+        this.minWordLength = minWordLength;
         this.dim = DEFAULT_DIM;
         board = new char[dim][dim];
-        words = new ArrayList<>();
+        wordList = new ArrayList<>();
         solved = false;
         classicDice = true;
         rand = new Random();
         dice = new Dice(classicDice);
         dieAtIndexList = new int[dim * dim];
+        dictionaryTrie = new DictionaryTrie();
+        dictionaryTrie.buildTrieFromFile();
     }
 
     /*
@@ -40,7 +49,6 @@ public class BoggleBoard extends Board {
 
     /*
     public BoggleBoard(char[][] board) {
-        // todo: verify valid boggle board
         this();
         Board.copy2D(board, this.board);
     }
@@ -50,63 +58,89 @@ public class BoggleBoard extends Board {
         BoggleBoard board = new BoggleBoard();
         board.setRandom();
         System.out.println(board);
-        WordBuilder wb = board.getWordBuilder();
-        boolean res;
-        int popped;
-        int pushing;
 
-        pushing = 0;
-        res = wb.push(pushing);
-        System.out.printf("%d: %s; %s; current: %d; %s%n", pushing, res, wb, wb.currentPosition, wb.word());
-        pushing = 1;
-        res = wb.push(pushing);
-        System.out.printf("%d: %s; %s; current: %d; %s%n", pushing, res, wb, wb.currentPosition, wb.word());
-        pushing = 5;
-        res = wb.push(pushing);
-        System.out.printf("%d: %s; %s; current: %d; %s%n", pushing, res, wb, wb.currentPosition, wb.word());
-        pushing = 11;
-        res = wb.push(pushing);
-        System.out.printf("%d: %s; %s; current: %d; %s%n", pushing, res, wb, wb.currentPosition, wb.word());
-        pushing = 1;
-        res = wb.push(pushing);
-        System.out.printf("%d: %s; size=%d; %s; current: %d; %s%n", pushing, res, wb.stackSize, wb, wb.currentPosition, wb.word());
-        popped = wb.pop();
-        System.out.printf("%d: %s; size=%d; %s; current: %d; %s%n", popped, res, wb.stackSize, wb, wb.currentPosition, wb.word());
-        popped = wb.pop();
-        System.out.printf("%d: %s; size=%d; %s; current: %d; %s%n", popped, res, wb.stackSize, wb, wb.currentPosition, wb.word());
+        System.out.println(board.dictionaryTrie);
+
+        board.solve();
+
+        ArrayList<String> words = board.getWordList();
+        System.out.println(words);
+        for (String s : words) {
+            if (!board.wordIsValid(s)) {
+                System.out.println(s);
+            }
+        }
+        System.out.println("Done with found words");
+        String[] toSearch = new String[]{"hello", "cat", "a", "slksd", "a2l12", "aAss", "al"};
+        for (String s : toSearch) {
+            if (board.wordIsValid(s) && !words.contains(s)) {
+                System.out.printf("%s false positive", s);
+            }
+            if (!board.wordIsValid(s) && words.contains(s)) {
+                System.out.printf("%s false negative", s);
+            }
+        }
+        System.out.println("Done");
+
+        BoggleBoard board1 = new BoggleBoard();
+        board1.setLettersFromList(new char[]{'q', 'a', 'c', 'k', 'a', 'r', 's', 'y', 'l', 'k', 'e', 'i', 'n', 'g', 'e', 'm'});
+        System.out.println(board1);
+        board1.solve();
+        System.out.println(board1.getWordList());
+        System.out.println(board1.wordIsValid("qacky"));
+        System.out.println(board1.wordIsValid("quacky"));
     }
 
     @Override
-    public boolean setLettersFromList(ArrayList<Character> letters) {
-        // todo: verify valid boggle board
-        if (letters.size() != dim * dim) {
+    public boolean setLettersFromList(char[] letters) {
+
+        if (letters.length != dim * dim) {
             return false;
         }
-        for (int i = 0; i < letters.size(); i++) {
-            board[i / dim][i % dim] = letters.get(i);
+        for (int i = 0; i < letters.length; i++) {
+            board[i / dim][i % dim] = letters[i];
         }
+        dice = new Dice(letters);
+        initializeDieLocations();
+
         return true;
     }
 
     @Override
     public boolean setLetters(char[][] letterGrid) {
-        // todo: verify valid boggle board
-        // rows != 0, so if rows == letterGrid.length, letterGrid[0] will never be out of bounds
         if (dim != letterGrid.length || dim != letterGrid[0].length) {
             return false;
         }
         Board.copy2D(letterGrid, board);
+
+        char[] letters = new char[dim * dim];
+        for (int i = 0; i < dim; i++) {
+            System.arraycopy(letterGrid[i], 0, letters, i * 3, dim);
+        }
+        dice = new Dice(letters);
+        initializeDieLocations();
+
         return true;
     }
 
     @Override
     public void solve() {
-
+        if (dictionaryTrie.size() == 0) {
+            dictionaryTrie.buildTrieFromFile();
+        }
+        WordBuilder wb = new WordBuilder();
+        Set<String> found = new HashSet<>();
+        solveHelper(dictionaryTrie.getRoot(), wb, found);
+        solved = true;
+        wordList = (ArrayList<String>) found.stream().sorted().collect(Collectors.toList());
     }
 
     @Override
-    public ArrayList<String> getWords() {
-        return null;
+    public ArrayList<String> getWordList() {
+        if (!solved) {
+            solve();
+        }
+        return wordList;
     }
 
     @Override
@@ -115,14 +149,50 @@ public class BoggleBoard extends Board {
         RandomDiceOrderFisherYates();
 
         for (int i = 0; i < dim * dim; i++) {
-            System.out.printf("i=%d, dieNum=%d, die=%s, side=%d, val=%c%n", i, dieAtIndexList[i], new String(dieFromLocationIndex(i).getValues()), dieFromLocationIndex(i).getSide(), dieFromLocationIndex(i).getValue());
             board[i / dim][i % dim] = dieFromLocationIndex(i).getValue();
         }
     }
 
     @Override
     public boolean wordIsValid(String word) {
-        return true;
+        if (word == null || word.length() < minWordLength) {
+            return false;
+        }
+
+        word = word.toLowerCase();
+        if (word.chars().anyMatch(num -> (num < 'a' || num > 'z'))) {
+            System.out.println("Not alphanumeric");
+            return false;
+        }
+        WordBuilder wb = new WordBuilder();
+        return wordIsValid(word, 0, wb);
+    }
+
+    private boolean wordIsValid(String word, int index, WordBuilder wb) {
+        if (index == word.length()) {
+            return true;
+        }
+
+        int[] valid = wb.validNext();
+        boolean found;
+        for (int j : valid) {
+            if (dieFromLocationIndex(j).getValue() == word.charAt(index)) {
+                wb.push(j);
+                if (word.charAt(index) == 'q') { // u must follow q
+                    if (index == word.length() - 1 || word.charAt(index + 1) != 'u') {
+                        return false;
+                    } else {
+                        index++;
+                    }
+                }
+                found = wordIsValid(word, index + 1, wb);
+                if (found) {
+                    return true;
+                }
+                wb.pop();
+            }
+        }
+        return false;
     }
 
     @Override
@@ -149,11 +219,8 @@ public class BoggleBoard extends Board {
     private void RandomDiceOrderFisherYates() {
         int swapIndex;
         int tmp;
-        // initialize
-        for (int i = 0; i < dim * dim; i++) {
-            dieAtIndexList[i] = i;
-        }
 
+        initializeDieLocations();
         for (int i = 0; i < dim * dim - 1; i++) {
             swapIndex = rand.nextInt(i, dim * dim);
             tmp = dieAtIndexList[swapIndex];
@@ -162,8 +229,40 @@ public class BoggleBoard extends Board {
         }
     }
 
+    private void initializeDieLocations() {
+        for (int i = 0; i < dim * dim; i++) {
+            dieAtIndexList[i] = i;
+        }
+    }
+
     private Die dieFromLocationIndex(int index) {
         return dice.get(dieAtIndexList[index]);
+    }
+
+    private void solveHelper(AlphaTrieNode node, WordBuilder wb, Set<String> words) {
+        if (node == null) {
+            return;
+        }
+        if (wb.stackSize >= minWordLength && node.isWord()) {
+            words.add(wb.word());
+        }
+
+        AlphaTrieNode next;
+        int[] validNext = wb.validNext();
+        for (int j : validNext) {
+            next = node.getChildAtChar(dieFromLocationIndex(j).getValue());
+            if (next != null) {
+                if (next.value == 'q') { // u must follow q
+                    next = next.getChildAtChar('u');
+                    if (next == null) { // if there are no words with a u after the q here
+                        continue;
+                    }
+                }
+                wb.push(j);
+                solveHelper(next, wb, words);
+                wb.pop();
+            }
+        }
     }
 
     class WordBuilder {
@@ -218,7 +317,9 @@ public class BoggleBoard extends Board {
             }
             stackSize--;
             int ret = letterStack[stackSize];
-            currentPosition = letterStack[stackSize - 1];
+            if (stackSize != 0) {
+                currentPosition = letterStack[stackSize - 1];
+            }
             used[ret] = false;
             return ret;
         }
@@ -232,11 +333,23 @@ public class BoggleBoard extends Board {
         }
 
         public String word() {
-            char[] chars = new char[stackSize];
+            StringBuilder sb = new StringBuilder();
+            char c;
             for (int i = 0; i < stackSize; i++) {
-                chars[i] = dieFromStackIndex(i).getValue();
+                c = dieFromStackIndex(i).getValue();
+                sb.append(c);
+                if (c == 'q') {
+                    sb.append('u');
+                }
             }
-            return new String(chars);
+            return sb.toString();
+        }
+
+        public int[] validNext() {
+            if (stackSize == 0) {
+                return IntStream.range(0, dim * dim).toArray();
+            }
+            return Arrays.stream(NEIGHBORS[currentPosition]).filter(num -> !used[num]).toArray();
         }
 
         private Die dieFromStackIndex(int index) {

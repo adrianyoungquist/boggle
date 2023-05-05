@@ -1,5 +1,6 @@
 package sjsu.cs146spring2023.acls.core;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Dice {
@@ -35,6 +36,15 @@ public class Dice {
             dice = CLASSIC_DICE;
         } else {
             dice = MODERN_DICE;
+        }
+    }
+
+    public Dice(char[] values) { // all 6 sides of each die will have the same values
+        char[] tmp_sides = new char[Die.SIDES];
+        dice = new Die[values.length];
+        for (int i = 0; i < values.length; i++) {
+            Arrays.fill(tmp_sides, values[i]);
+            dice[i] = new Die(tmp_sides);
         }
     }
 

@@ -18,7 +18,7 @@ public class TestingBoard extends Board {
     }
 
     @Override
-    public boolean setLettersFromList(ArrayList<Character> letters) {
+    public boolean setLettersFromList(char[] letters) {
         return true;
     }
 
@@ -35,7 +35,7 @@ public class TestingBoard extends Board {
     }
 
     @Override
-    public ArrayList<String> getWords() {
+    public ArrayList<String> getWordList() {
         if (!solved) {
             solve();
         }

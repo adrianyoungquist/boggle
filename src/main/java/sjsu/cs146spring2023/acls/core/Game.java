@@ -50,7 +50,7 @@ public abstract class Game {
     }
 
     public ArrayList<String> getAllWords() {
-        return board.getWords();
+        return board.getWordList();
     }
 
     public abstract boolean hasFound(String word);

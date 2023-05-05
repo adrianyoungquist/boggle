@@ -44,7 +44,7 @@ public abstract class Board {
         this.dictionaryTrie = dictionaryTrie;
     }
 
-    public abstract boolean setLettersFromList(ArrayList<Character> letters);
+    public abstract boolean setLettersFromList(char[] letters);
 
     public abstract boolean setLetters(char[][] letterGrid);
 
@@ -58,7 +58,7 @@ public abstract class Board {
 
     public abstract void solve();
 
-    public abstract ArrayList<String> getWords();
+    public abstract ArrayList<String> getWordList();
 
     public abstract void setRandom();
 

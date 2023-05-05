@@ -57,6 +57,10 @@ public class AlphabetTrie {
         System.out.println(trie.allWords());
     }
 
+    public AlphaTrieNode getRoot() {
+        return root;
+    }
+
     public boolean isEmpty() {
         return size == 0;
     }
@@ -259,6 +263,10 @@ class AlphaTrieNode {
             }
         }
         return characters;
+    }
+
+    public AlphaTrieNode getParent() {
+        return parent;
     }
 
     public char getValue() {
