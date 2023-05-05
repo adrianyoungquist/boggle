@@ -10,7 +10,6 @@ public class BoggleBoard extends Board {
     private final Random rand;
     protected ArrayList<String> wordList;
     protected int dim; // assumes square
-    protected int minWordLength;
     protected int[] dieAtIndexList; // stores which die # is at location in grid
     /*
     Grid is arranged:
@@ -71,7 +70,7 @@ public class BoggleBoard extends Board {
             }
         }
         System.out.println("Done with found words");
-        String[] toSearch = new String[]{"hello", "cat", "a", "slksd", "a2l12", "aAss", "al"};
+        String[] toSearch = new String[]{"hello", "cat", "a", "slksd", "a2l12", "aAbs", "al"};
         for (String s : toSearch) {
             if (board.wordIsValid(s) && !words.contains(s)) {
                 System.out.printf("%s false positive", s);
@@ -140,7 +139,14 @@ public class BoggleBoard extends Board {
         if (!solved) {
             solve();
         }
-        return wordList;
+        return (ArrayList<String>) wordList.stream().sorted(new WordLengthComparator()).collect(Collectors.toList());
+    }
+
+    @Override
+    public void setMinWordLength(int minWordLength) {
+        this.minWordLength = minWordLength;
+        wordList.clear();
+        solved = false;
     }
 
     @Override

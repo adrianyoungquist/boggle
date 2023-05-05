@@ -8,6 +8,7 @@ public abstract class Board {
     protected char[][] board;
     protected DictionaryTrie dictionaryTrie;
     boolean solved;
+    int minWordLength;
 
     public static void copy2D(char[][] src, char[][] dst) {
         if (src.length != dst.length) {
@@ -54,6 +55,14 @@ public abstract class Board {
 
     public void setDictionary(DictionaryTrie dictionaryTrie) {
         this.dictionaryTrie = dictionaryTrie;
+    }
+
+    public int getMinWordLength() {
+        return minWordLength;
+    }
+
+    public void setMinWordLength(int minWordLength) {
+        this.minWordLength = minWordLength;
     }
 
     public abstract void solve();

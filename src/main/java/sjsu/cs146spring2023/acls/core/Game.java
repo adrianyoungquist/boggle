@@ -5,10 +5,7 @@ import java.util.ArrayList;
 
 public abstract class Game {
     protected Board board;
-    protected ArrayList<String> foundWords;
-
-    protected int score;
-
+    protected int totalScore;
     protected DictionaryTrie dictionaryTrie;
 
     public DictionaryTrie getDictionaryTrie() {
@@ -28,18 +25,13 @@ public abstract class Game {
         this.board = board;
     }
 
-    public ArrayList<String> getFoundWords() {
-        return foundWords;
-    }
+    public abstract ArrayList<String> getFoundWords();
 
     public int getScore() {
-        return score;
+        return totalScore;
     }
 
-    public void clearFoundWords() {
-        foundWords.clear();
-        score = 0;
-    }
+    public abstract void clearFoundWords();
 
     public void makeRandomBoard() {
         board.setRandom();
@@ -59,11 +51,12 @@ public abstract class Game {
 
     public abstract int addWord(String word);
 
+    public abstract int totalPointsInBoard();
 
     @Override
     public String toString() {
         return "Game\n" +
                 "board:\n" + board +
-                "\nfoundWords:" + foundWords;
+                "\nfoundWords:" + getFoundWords();
     }
 }
