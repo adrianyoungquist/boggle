@@ -3,16 +3,14 @@ package sjsu.cs146spring2023.acls.core;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Time;
-import java.util.ArrayList;
 
 public class DictionaryTrie extends AlphabetTrie {
     public String DEFAULT_FILE_NAME = "dictionary.txt";
     protected String fileName; // relative to resources
 
     public DictionaryTrie() {
-       super();
-       this.fileName = DEFAULT_FILE_NAME;
+        super();
+        this.fileName = DEFAULT_FILE_NAME;
     }
 
     public DictionaryTrie(String fileName) {

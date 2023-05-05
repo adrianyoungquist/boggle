@@ -7,11 +7,6 @@ import sjsu.cs146spring2023.acls.core.Game;
 import sjsu.cs146spring2023.acls.core.TestingGame;
 
 public class BoggleApp extends Application {
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.show();
-    }
-
     public static void main(String[] args) {
         Game game = new TestingGame();
         game.setDictionaryTrie(new DictionaryTrie());
@@ -22,5 +17,10 @@ public class BoggleApp extends Application {
         System.out.println(game.addWord("hello"));
         System.out.println(game.addWord("niche"));
         launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.show();
     }
 }
