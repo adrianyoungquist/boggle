@@ -4,6 +4,11 @@ package sjsu.cs146spring2023.acls.core;
 import java.util.ArrayList;
 
 public abstract class Game {
+    public static final int SCORE_ISSUE_ALREADY_FOUND = 0;
+    public static final int SCORE_ISSUE_TOO_SHORT = -1;
+    public static final int SCORE_ISSUE_NOT_WORD = -2;
+    public static final int SCORE_ISSUE_CANNOT_MAKE = -3;
+
     protected Board board;
     protected int totalScore;
     protected DictionaryTrie dictionaryTrie;
@@ -35,6 +40,7 @@ public abstract class Game {
 
     public void makeRandomBoard() {
         board.setRandom();
+        totalScore = 0;
     }
 
     public void solveBoard() {
@@ -51,7 +57,26 @@ public abstract class Game {
 
     public abstract int addWord(String word);
 
+    public abstract String addWordPrintOutput(String word);
+
     public abstract int totalPointsInBoard();
+
+    public void reset() {
+        clearFoundWords();
+        board.reset();
+    }
+
+    public void showBoard() {
+        System.out.println(board);
+    }
+
+    public int getMinWordLength() {
+        return board.getMinWordLength();
+    }
+
+    public void setMinWordLength(int minLength) {
+        board.setMinWordLength(minLength);
+    }
 
     @Override
     public String toString() {

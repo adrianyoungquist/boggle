@@ -55,4 +55,10 @@ public class TestingBoard extends Board {
         }
         return words.contains(word);
     }
+
+    @Override
+    public void reset() {
+        solved = false;
+        words.clear();
+    }
 }

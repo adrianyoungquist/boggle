@@ -5,7 +5,6 @@ import javafx.stage.Stage;
 import sjsu.cs146spring2023.acls.core.BoggleGame;
 import sjsu.cs146spring2023.acls.core.DictionaryTrie;
 import sjsu.cs146spring2023.acls.core.Game;
-import sjsu.cs146spring2023.acls.core.TestingGame;
 
 import java.util.ArrayList;
 

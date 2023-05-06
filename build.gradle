@@ -1,11 +1,13 @@
 plugins {
     id 'java'
     id 'application'
+    id 'distribution'
     id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 group 'sjsu.cs146spring2023.acls'
 version '1.0-SNAPSHOT'
+mainClassName = 'sjsu.cs146spring2023.acls.core.TerminalApp'
 
 repositories {
     mavenCentral()
@@ -17,7 +19,12 @@ dependencies {
 }
 
 application {
-    mainClass = 'sjsu.cs146spring2023.acls.ui.BoggleApp'
+    mainClass = 'sjsu.cs146spring2023.acls.core.TerminalApp'
+}
+
+run {
+    standardInput = System.in
+    standardOutput = System.out
 }
 
 javafx {
@@ -29,3 +36,26 @@ test {
     useJUnitPlatform()
 }
 
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes(
+                'Main-Class': mainClassName
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+distributions {
+    main {
+        version = '1.0'
+
+        contents {
+            from('src/main/resources')
+            from('build/libs')
+            into('lib')
+        }
+    }
+}

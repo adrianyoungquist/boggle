@@ -57,6 +57,10 @@ public class AlphabetTrie {
         System.out.println(trie.allWords());
     }
 
+    private static boolean notAlphanumeric(String word) {
+        return word.toLowerCase().chars().anyMatch(num -> (num < 'a' || num > 'z'));
+    }
+
     public AlphaTrieNode getRoot() {
         return root;
     }
@@ -74,12 +78,18 @@ public class AlphabetTrie {
     }
 
     public boolean contains(String word) {
+        if (notAlphanumeric(word)) {
+            return false;
+        }
         word = word.toLowerCase();
         Pair<AlphaTrieNode, Integer> foundPair = findLocation(word);
         return foundPair.value == word.length() && foundPair.key.isWord();
     }
 
     public boolean containsPrefix(String prefix) {
+        if (notAlphanumeric(prefix)) {
+            return false;
+        }
         prefix = prefix.toLowerCase();
         Pair<AlphaTrieNode, Integer> foundPair = findLocation(prefix);
         return (foundPair.value == prefix.length());
@@ -87,11 +97,18 @@ public class AlphabetTrie {
 
     public AlphaTrieNode getPrefix(String prefix) {
         prefix = prefix.toLowerCase();
+        if (notAlphanumeric(prefix)) {
+            return null;
+        }
         return findLocation(prefix).key;
     }
 
     public AlphaTrieNode insert(String word) {
         word = word.toLowerCase();
+        if (notAlphanumeric(word)) {
+            return null;
+        }
+
         Pair<AlphaTrieNode, Integer> foundPair = findLocation(word);
         if (foundPair.value == word.length()) { // full word
             if (!foundPair.key.isWord()) {
@@ -104,6 +121,10 @@ public class AlphabetTrie {
     }
 
     public boolean remove(String word) { // soft delete
+        if (notAlphanumeric(word)) {
+            return false;
+        }
+
         word = word.toLowerCase();
         Pair<AlphaTrieNode, Integer> foundPair = findLocation(word);
         if (foundPair.value < word.length()) {

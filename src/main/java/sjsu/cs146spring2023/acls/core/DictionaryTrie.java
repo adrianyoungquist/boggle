@@ -1,8 +1,6 @@
 package sjsu.cs146spring2023.acls.core;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class DictionaryTrie extends AlphabetTrie {
     public String DEFAULT_FILE_NAME = "dictionary.txt";
@@ -31,9 +29,15 @@ public class DictionaryTrie extends AlphabetTrie {
         if (fileName == null) {
             return false;
         }
+        InputStream inputStream;
+        inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
+        if (inputStream == null) {
+            return false;
+        }
+
         BufferedReader br;
         try {
-            br = new BufferedReader(new FileReader("src/main/resources/" + fileName));
+            br = new BufferedReader(new InputStreamReader(inputStream));
             String line;
             while ((line = br.readLine()) != null) {
                 insert(line);

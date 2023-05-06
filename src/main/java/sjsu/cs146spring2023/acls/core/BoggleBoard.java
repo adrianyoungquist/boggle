@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 public class BoggleBoard extends Board {
     public static final int DEFAULT_DIM = 4;
     public static final int DEFAULT_MIN_WORD_LENGTH = 3;
-    private final Random rand;
+    private static final Random rand = new Random();
     protected ArrayList<String> wordList;
     protected int dim; // assumes square
     protected int[] dieAtIndexList; // stores which die # is at location in grid
@@ -23,21 +23,30 @@ public class BoggleBoard extends Board {
 
 
     public BoggleBoard() {
-        this(DEFAULT_MIN_WORD_LENGTH);
+        this(DEFAULT_MIN_WORD_LENGTH, new DictionaryTrie());
     }
 
     public BoggleBoard(int minWordLength) {
+        this(minWordLength, new DictionaryTrie());
+    }
+
+    public BoggleBoard(DictionaryTrie dictionaryTrie) {
+        this(DEFAULT_MIN_WORD_LENGTH, dictionaryTrie);
+    }
+
+    public BoggleBoard(int minWordLength, DictionaryTrie dictionaryTrie) {
         this.minWordLength = minWordLength;
         this.dim = DEFAULT_DIM;
         board = new char[dim][dim];
         wordList = new ArrayList<>();
         solved = false;
         classicDice = true;
-        rand = new Random();
         dice = new Dice(classicDice);
         dieAtIndexList = new int[dim * dim];
-        dictionaryTrie = new DictionaryTrie();
-        dictionaryTrie.buildTrieFromFile();
+        this.dictionaryTrie = dictionaryTrie;
+        if (dictionaryTrie.size() == 0) {
+            dictionaryTrie.buildTrieFromFile();
+        }
     }
 
     /*
@@ -102,6 +111,9 @@ public class BoggleBoard extends Board {
         dice = new Dice(letters);
         initializeDieLocations();
 
+        wordList.clear();
+        solved = false;
+
         return true;
     }
 
@@ -116,10 +128,7 @@ public class BoggleBoard extends Board {
         for (int i = 0; i < dim; i++) {
             System.arraycopy(letterGrid[i], 0, letters, i * 3, dim);
         }
-        dice = new Dice(letters);
-        initializeDieLocations();
-
-        return true;
+        return setLettersFromList(letters);
     }
 
     @Override
@@ -157,6 +166,9 @@ public class BoggleBoard extends Board {
         for (int i = 0; i < dim * dim; i++) {
             board[i / dim][i % dim] = dieFromLocationIndex(i).getValue();
         }
+
+        wordList.clear();
+        solved = false;
     }
 
     @Override
@@ -199,6 +211,12 @@ public class BoggleBoard extends Board {
             }
         }
         return false;
+    }
+
+    @Override
+    public void reset() {
+        solved = false;
+        wordList.clear();
     }
 
     @Override

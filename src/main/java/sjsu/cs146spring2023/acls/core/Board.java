@@ -25,7 +25,7 @@ public abstract class Board {
         }
     }
 
-    public char[][] getBoard() {
+    public char[][] getCharGrid() {
         return board;
     }
 
@@ -72,6 +72,8 @@ public abstract class Board {
     public abstract void setRandom();
 
     public abstract boolean wordIsValid(String word);
+
+    public abstract void reset();
 
     @Override
     public String toString() {
