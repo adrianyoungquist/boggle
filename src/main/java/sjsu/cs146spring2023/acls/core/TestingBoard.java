@@ -18,13 +18,17 @@ public class TestingBoard extends Board {
     }
 
     @Override
-    public boolean setLettersFromList(char[] letters) {
+    public boolean setLetters(char[] letters) {
+        return true;
+    }
+    @Override
+    public boolean setLetters(char[][] letterGrid) {
         return true;
     }
 
     @Override
-    public boolean setLetters(char[][] letterGrid) {
-        return true;
+    public boolean setLetters(String letterGrid) {
+        return setLetters(letterGrid.toCharArray());
     }
 
     @Override
@@ -49,7 +53,7 @@ public class TestingBoard extends Board {
     }
 
     @Override
-    public boolean wordIsValid(String word) {
+    public boolean canMake(String word) {
         if (!solved) {
             solve();
         }

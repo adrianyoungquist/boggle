@@ -9,6 +9,7 @@ public abstract class Board {
     protected DictionaryTrie dictionaryTrie;
     boolean solved;
     int minWordLength;
+    int dim;
 
     public static void copy2D(char[][] src, char[][] dst) {
         if (src.length != dst.length) {
@@ -37,6 +38,10 @@ public abstract class Board {
         this.solved = solved;
     }
 
+    public int getDim() {
+        return dim;
+    }
+
     public DictionaryTrie getDictionaryTrie() {
         return dictionaryTrie;
     }
@@ -45,9 +50,11 @@ public abstract class Board {
         this.dictionaryTrie = dictionaryTrie;
     }
 
-    public abstract boolean setLettersFromList(char[] letters);
+    public abstract boolean setLetters(char[] letters);
 
     public abstract boolean setLetters(char[][] letterGrid);
+
+    public abstract boolean setLetters(String letters);
 
     public DictionaryTrie getDictionary() {
         return dictionaryTrie;
@@ -71,7 +78,7 @@ public abstract class Board {
 
     public abstract void setRandom();
 
-    public abstract boolean wordIsValid(String word);
+    public abstract boolean canMake(String word);
 
     public abstract void reset();
 

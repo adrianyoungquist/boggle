@@ -49,7 +49,7 @@ public class BoggleGame extends Game {
         if (!dictionaryTrie.contains(word)) {
             return SCORE_ISSUE_NOT_WORD;
         }
-        if (!board.wordIsValid(word)) {
+        if (!board.canMake(word)) {
             return SCORE_ISSUE_CANNOT_MAKE;
         }
         return rawScore(word);

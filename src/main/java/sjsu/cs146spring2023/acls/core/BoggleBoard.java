@@ -8,8 +8,7 @@ public class BoggleBoard extends Board {
     public static final int DEFAULT_DIM = 4;
     public static final int DEFAULT_MIN_WORD_LENGTH = 3;
     private static final Random rand = new Random();
-    protected ArrayList<String> wordList;
-    protected int dim; // assumes square
+    protected TreeSet<String> wordList;
     protected int[] dieAtIndexList; // stores which die # is at location in grid
     /*
     Grid is arranged:
@@ -38,7 +37,7 @@ public class BoggleBoard extends Board {
         this.minWordLength = minWordLength;
         this.dim = DEFAULT_DIM;
         board = new char[dim][dim];
-        wordList = new ArrayList<>();
+        wordList = new TreeSet<>();
         solved = false;
         classicDice = true;
         dice = new Dice(classicDice);
@@ -74,43 +73,39 @@ public class BoggleBoard extends Board {
         ArrayList<String> words = board.getWordList();
         System.out.println(words);
         for (String s : words) {
-            if (!board.wordIsValid(s)) {
+            if (!board.canMake(s)) {
                 System.out.println(s);
             }
         }
         System.out.println("Done with found words");
         String[] toSearch = new String[]{"hello", "cat", "a", "slksd", "a2l12", "aAbs", "al"};
         for (String s : toSearch) {
-            if (board.wordIsValid(s) && !words.contains(s)) {
+            if (board.canMake(s) && !words.contains(s)) {
                 System.out.printf("%s false positive", s);
             }
-            if (!board.wordIsValid(s) && words.contains(s)) {
+            if (!board.canMake(s) && words.contains(s)) {
                 System.out.printf("%s false negative", s);
             }
         }
         System.out.println("Done");
 
         BoggleBoard board1 = new BoggleBoard();
-        board1.setLettersFromList(new char[]{'q', 'a', 'c', 'k', 'a', 'r', 's', 'y', 'l', 'k', 'e', 'i', 'n', 'g', 'e', 'm'});
+        board1.setLetters(new char[]{'q', 'a', 'c', 'k', 'a', 'r', 's', 'y', 'l', 'k', 'e', 'i', 'n', 'g', 'e', 'm'});
         System.out.println(board1);
         board1.solve();
         System.out.println(board1.getWordList());
-        System.out.println(board1.wordIsValid("qacky"));
-        System.out.println(board1.wordIsValid("quacky"));
+        System.out.println(board1.canMake("qacky"));
+        System.out.println(board1.canMake("quacky"));
     }
 
     @Override
-    public boolean setLettersFromList(char[] letters) {
-
-        if (letters.length != dim * dim) {
+    public boolean setLetters(char[] letters) {
+        if (letters.length != dim * dim || !isAlphanumeric(letters)) {
             return false;
-        }
-        for (int i = 0; i < letters.length; i++) {
-            board[i / dim][i % dim] = letters[i];
         }
         dice = new Dice(letters);
         initializeDieLocations();
-
+        setCharBoard();
         wordList.clear();
         solved = false;
 
@@ -128,7 +123,12 @@ public class BoggleBoard extends Board {
         for (int i = 0; i < dim; i++) {
             System.arraycopy(letterGrid[i], 0, letters, i * 3, dim);
         }
-        return setLettersFromList(letters);
+        return setLetters(letters);
+    }
+
+    @Override
+    public boolean setLetters(String letterGrid) {
+        return setLetters(letterGrid.toCharArray());
     }
 
     @Override
@@ -140,7 +140,7 @@ public class BoggleBoard extends Board {
         Set<String> found = new HashSet<>();
         solveHelper(dictionaryTrie.getRoot(), wb, found);
         solved = true;
-        wordList = (ArrayList<String>) found.stream().sorted().collect(Collectors.toList());
+        wordList = new TreeSet<>(found);
     }
 
     @Override
@@ -162,23 +162,19 @@ public class BoggleBoard extends Board {
     public void setRandom() {
         dice.randomizeDiceSides(rand);
         RandomDiceOrderFisherYates();
-
-        for (int i = 0; i < dim * dim; i++) {
-            board[i / dim][i % dim] = dieFromLocationIndex(i).getValue();
-        }
-
+        setCharBoard();
         wordList.clear();
         solved = false;
     }
 
     @Override
-    public boolean wordIsValid(String word) {
+    public boolean canMake(String word) {
         if (word == null || word.length() < minWordLength) {
             return false;
         }
 
         word = word.toLowerCase();
-        if (word.chars().anyMatch(num -> (num < 'a' || num > 'z'))) {
+        if (!isAlphanumeric(word)) {
             System.out.println("Not alphanumeric");
             return false;
         }
@@ -246,7 +242,7 @@ public class BoggleBoard extends Board {
 
         initializeDieLocations();
         for (int i = 0; i < dim * dim - 1; i++) {
-            swapIndex = rand.nextInt(i, dim * dim);
+            swapIndex = i + rand.nextInt( dim * dim - i);
             tmp = dieAtIndexList[swapIndex];
             dieAtIndexList[swapIndex] = dieAtIndexList[i];
             dieAtIndexList[i] = tmp;
@@ -289,8 +285,26 @@ public class BoggleBoard extends Board {
         }
     }
 
+    private void setCharBoard() {
+        for (int i = 0; i < dim * dim; i++) {
+            board[i / dim][i % dim] = dieFromLocationIndex(i).getValue();
+        }
+    }
+
+    private static boolean isAlphanumeric(String string) {
+        return string.chars().noneMatch(s -> (s < 'a' || s > 'z'));
+    }
+    private static boolean isAlphanumeric(char[] chars) {
+        for (char c : chars) {
+            c = Character.toLowerCase(c);
+            if (c < 'a' || c > 'z') {
+                return false;
+            }
+        }
+        return true;
+    }
     class WordBuilder {
-        private static final int[][] NEIGHBORS = new int[][]{
+        private final int[][] NEIGHBORS = new int[][]{
                 {1, 4, 5},                      // 0
                 {0, 2, 4, 5, 6},                // 1
                 {1, 3, 5, 6, 7},                // 2

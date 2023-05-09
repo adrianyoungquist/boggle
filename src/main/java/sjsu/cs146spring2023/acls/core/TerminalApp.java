@@ -16,7 +16,7 @@ public class TerminalApp {
 }
 
 class TerminalGame {
-    private static final int NUM_MENU_OPTIONS = 3;
+    private static final int NUM_MENU_OPTIONS = 4;
 
     Scanner scanner;
     Game game;
@@ -47,7 +47,8 @@ class TerminalGame {
                 Menu:
                 1: Play new game
                 2: Change minimum word length (currently %d)
-                3: Quit
+                3: Enter board
+                4: Quit
                 """, game.getMinWordLength()
         );
     }
@@ -77,9 +78,7 @@ class TerminalGame {
         }
     }
 
-    private void round() {
-        game.reset();
-        game.makeRandomBoard();
+    private void roundPlay() {
         System.out.printf("""
                 Enter words. Words must be at least %d letters in length.
                 When you are finished, enter a single digit.%n
@@ -114,6 +113,12 @@ class TerminalGame {
         frame.dispose();
     }
 
+    private void runRound() {
+        game.reset();
+        game.makeRandomBoard();
+        roundPlay();
+    }
+
     public void play() {
         System.out.println("Welcome to boggle.");
         boolean stop = false;
@@ -123,13 +128,36 @@ class TerminalGame {
             menu();
             status = getMenuOption();
             switch (status) {
-                case 1 -> round();
+                case 1 -> runRound();
                 case 2 -> setMinLength();
-                case 3 -> stop = true;
+                case 3 -> setLetters();
+                case 4 -> stop = true;
             }
             System.out.println();
         }
         System.out.println("\nThank you for playing boggle.");
+    }
+
+    private void setLetters() {
+        System.out.println("Enter letters as a string of 16 letters like MNATNRIBAOPSQIDY. Input 'Q' for 'Qu'.");
+        System.out.print("Letters: ");
+        String input = scanner.nextLine();
+        int expectedSize = game.getBoard().getDim() * game.getBoard().getDim();
+        if (input.contains(" ")) {
+            System.out.println("Letters should be entered in a row with no spaces");
+        }
+        else if (input.length() != expectedSize) {
+            System.out.printf("Expected an input of length %d. Found %d.%n", expectedSize, input.length());
+        }
+        else if (!game.getBoard().setLetters(input)) {
+            System.out.println("Invalid letters.");
+        }
+        else {
+            System.out.println("Board successfully entered.");
+            game.reset();
+            game.solveBoard();
+            roundPlay();
+        }
     }
 
     private JFrame getBoardFrame() {
@@ -147,6 +175,7 @@ class TerminalGame {
         char[][] grid = game.getBoard().getCharGrid();
         JButton button;
         String buttonText;
+        Font font = new Font("Helvetica", Font.BOLD, 40);
         JPanel gridPanel = new JPanel(new GridLayout(grid.length, grid.length));
         for (char[] row : grid) {
             for (char c : row) {
@@ -156,6 +185,7 @@ class TerminalGame {
                     buttonText = String.valueOf(c).toUpperCase();
                 }
                 button = new JButton(buttonText);
+                button.setFont(font);
                 button.setFocusable(false);
                 button.setRolloverEnabled(false);
                 button.setEnabled(false);

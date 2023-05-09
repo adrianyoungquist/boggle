@@ -74,6 +74,13 @@ public class Dice {
             d.setRandom(rand);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Dice{" +
+                "dice=" + Arrays.toString(dice) +
+                '}';
+    }
 }
 
 class Die {
