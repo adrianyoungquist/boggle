@@ -43,13 +43,7 @@ class TerminalGame {
     }
 
     private void menu() {
-        System.out.printf("""
-                Menu:
-                1: Play new game
-                2: Change minimum word length (currently %d)
-                3: Enter board
-                4: Quit
-                """, game.getMinWordLength()
+        System.out.printf("Menu:%n1: Play new game%n2: Change minimum word length (currently %d)%n3: Enter board%n4: Quit", game.getMinWordLength()
         );
     }
 
@@ -79,10 +73,7 @@ class TerminalGame {
     }
 
     private void roundPlay() {
-        System.out.printf("""
-                Enter words. Words must be at least %d letters in length.
-                When you are finished, enter a single digit.%n
-                """, game.getBoard().getMinWordLength());
+        System.out.printf("Enter words. Words must be at least %d letters in length.%nWhen you are finished, enter a single digit.%n", game.getBoard().getMinWordLength());
 
         JFrame frame = getBoardFrame();
         frame.setVisible(true);
