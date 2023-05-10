@@ -43,7 +43,7 @@ class TerminalGame {
     }
 
     private void menu() {
-        System.out.printf("Menu:%n1: Play new game%n2: Change minimum word length (currently %d)%n3: Enter board%n4: Quit", game.getMinWordLength()
+        System.out.printf("Menu:%n1: Play new game%n2: Change minimum word length (currently %d)%n3: Enter board%n4: Quit%n", game.getMinWordLength()
         );
     }
 
