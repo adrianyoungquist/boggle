@@ -83,7 +83,7 @@ public class AlphabetTrie {
         }
         word = word.toLowerCase();
         Pair<AlphaTrieNode, Integer> foundPair = findLocation(word);
-        return foundPair.value == word.length() && foundPair.key.isWord();
+        return foundPair.getValue() == word.length() && foundPair.getKey().isWord();
     }
 
     public boolean containsPrefix(String prefix) {
@@ -92,7 +92,7 @@ public class AlphabetTrie {
         }
         prefix = prefix.toLowerCase();
         Pair<AlphaTrieNode, Integer> foundPair = findLocation(prefix);
-        return (foundPair.value == prefix.length());
+        return (foundPair.getValue() == prefix.length());
     }
 
     public AlphaTrieNode getPrefix(String prefix) {
@@ -100,7 +100,7 @@ public class AlphabetTrie {
         if (notAlphanumeric(prefix)) {
             return null;
         }
-        return findLocation(prefix).key;
+        return findLocation(prefix).getKey();
     }
 
     public AlphaTrieNode insert(String word) {
@@ -110,14 +110,14 @@ public class AlphabetTrie {
         }
 
         Pair<AlphaTrieNode, Integer> foundPair = findLocation(word);
-        if (foundPair.value == word.length()) { // full word
-            if (!foundPair.key.isWord()) {
+        if (foundPair.getValue() == word.length()) { // full word
+            if (!foundPair.getKey().isWord()) {
                 wordCount++;
-                foundPair.key.setIsWord(true);
+                foundPair.getKey().setIsWord(true);
             }
-            return foundPair.key;
+            return foundPair.getKey();
         }
-        return insertFullSuffix(foundPair.key, word, foundPair.value);
+        return insertFullSuffix(foundPair.getKey(), word, foundPair.getValue());
     }
 
     public boolean remove(String word) { // soft delete
@@ -127,13 +127,13 @@ public class AlphabetTrie {
 
         word = word.toLowerCase();
         Pair<AlphaTrieNode, Integer> foundPair = findLocation(word);
-        if (foundPair.value < word.length()) {
+        if (foundPair.getValue() < word.length()) {
             return false;
         }
-        if (!foundPair.key.isWord()) { // no word to remove
+        if (!foundPair.getKey().isWord()) { // no word to remove
             return false;
         }
-        foundPair.key.setIsWord(false); // soft deletion
+        foundPair.getKey().setIsWord(false); // soft deletion
         return true;
     }
 
@@ -215,29 +215,6 @@ public class AlphabetTrie {
                 "size=" + size +
                 ", wordCount=" + wordCount +
                 ", last word=" + lastWord();
-    }
-
-    private static class Pair<K, V> {
-        K key;
-        V value;
-
-        public Pair() {
-            key = null;
-            value = null;
-        }
-
-        public Pair(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return "Pair{" +
-                    "key=" + key +
-                    ", value=" + value +
-                    '}';
-        }
     }
 }
 

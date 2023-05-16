@@ -161,7 +161,7 @@ public class BoggleBoard extends Board {
     @Override
     public void setRandom() {
         dice.randomizeDiceSides(rand);
-        RandomDiceOrderFisherYates();
+        randomDiceOrderFisherYates();
         setCharBoard();
         wordList.clear();
         solved = false;
@@ -236,7 +236,7 @@ public class BoggleBoard extends Board {
         return new WordBuilder();
     }
 
-    private void RandomDiceOrderFisherYates() {
+    private void randomDiceOrderFisherYates() {
         int swapIndex;
         int tmp;
 
@@ -272,7 +272,7 @@ public class BoggleBoard extends Board {
         for (int j : validNext) {
             next = node.getChildAtChar(dieFromLocationIndex(j).getValue());
             if (next != null) {
-                if (next.value == 'q') { // u must follow q
+                if (next.getValue() == 'q') { // u must follow q
                     next = next.getChildAtChar('u');
                     if (next == null) { // if there are no words with a u after the q here
                         continue;

@@ -6,10 +6,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.OptionalInt;
 import java.util.Scanner;
+import javafx.stage.Stage;
+
 
 public class TerminalApp {
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         TerminalGame game = new TerminalGame();
         game.play();
     }
@@ -43,14 +44,11 @@ class TerminalGame {
     }
 
     private void menu() {
-        System.out.printf("""
-                Menu:
-                1: Play new game
-                2: Change minimum word length (currently %d)
-                3: Enter board
-                4: Quit
-                """, game.getMinWordLength()
-        );
+        System.out.printf("Menu:%n" +
+                "1: Play new game%n" +
+                "2: Change minimum word length (currently %d)%n" +
+                "3: Enter board%n" +
+                "4: Quit%n", game.getMinWordLength());
     }
 
     private int getMenuOption() {
@@ -79,10 +77,8 @@ class TerminalGame {
     }
 
     private void roundPlay() {
-        System.out.printf("""
-                Enter words. Words must be at least %d letters in length.
-                When you are finished, enter a single digit.%n
-                """, game.getBoard().getMinWordLength());
+        System.out.printf("Enter words. Words must be at least %d letters in length.%n" +
+                "When you are finished, enter a single digit.%n", game.getBoard().getMinWordLength());
 
         JFrame frame = getBoardFrame();
         frame.setVisible(true);

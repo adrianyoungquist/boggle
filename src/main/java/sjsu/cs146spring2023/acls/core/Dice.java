@@ -140,6 +140,14 @@ class Die {
         return side;
     }
 
+    public boolean contains(char c) {
+        for (char ch : values) {
+            if (c == ch) {
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     public String toString() {
         return "S" + side + ":" + getValue();

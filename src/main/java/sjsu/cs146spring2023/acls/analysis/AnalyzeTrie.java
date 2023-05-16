@@ -33,6 +33,7 @@ public class AnalyzeTrie {
             totalLetters = 0;
             trie = new DictionaryTrie(fileNames[i]);
             trie.buildTrieFromFile();
+            System.out.println(trie.size());
             words = trie.allWords();
             for (String w : words) {
                 totalLetters += w.length();
@@ -47,7 +48,6 @@ public class AnalyzeTrie {
         //System.out.printf("Times: trie=%d, list=%d%n", times[0], times[1]);
         // result for toFind=dictionary.txt, reps=1000, search for word and word + "e":
         // Trie: 22244, list: 51412
-
         double[] ratios = letterCountRatio();
         System.out.printf("Letter ratio (# nodes/# letters): small=%.5f, medium=%.5f, large=%.5f, full=%.5f%n", ratios[0], ratios[1], ratios[2], ratios[3]);
     }
