@@ -1,4 +1,4 @@
-package sjsu.cs146spring2023.acls.core;
+package com.adrianyoungquist.core;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -117,7 +117,7 @@ public class BoggleBoard extends Board {
         if (dim != letterGrid.length || dim != letterGrid[0].length) {
             return false;
         }
-        Board.copy2D(letterGrid, board);
+        copy2D(letterGrid, board);
 
         char[] letters = new char[dim * dim];
         for (int i = 0; i < dim; i++) {

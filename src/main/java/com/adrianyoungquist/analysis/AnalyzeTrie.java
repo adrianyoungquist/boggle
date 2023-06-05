@@ -1,6 +1,6 @@
-package sjsu.cs146spring2023.acls.analysis;
+package com.adrianyoungquist.analysis;
 
-import sjsu.cs146spring2023.acls.core.DictionaryTrie;
+import com.adrianyoungquist.core.DictionaryTrie;
 
 import java.util.ArrayList;
 

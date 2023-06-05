@@ -1,4 +1,4 @@
-package sjsu.cs146spring2023.acls.core;
+package com.adrianyoungquist.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +49,7 @@ public class TestingBoard extends Board {
     @Override
     public void setRandom() {
         char[][] letters = {{'w', 'n', 'b', 'y'}, {'i', 'c', 'h', 's'}, {'l', 't', 'h', 'e'}, {'c', 'm', 'f', 'v'}};
-        Board.copy2D(letters, board);
+        copy2D(letters, board);
     }
 
     @Override

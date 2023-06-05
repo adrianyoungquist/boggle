@@ -5,9 +5,9 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
-group 'sjsu.cs146spring2023.acls'
+group 'com.adrianyoungquist'
 version '1.0-SNAPSHOT'
-mainClassName = 'sjsu.cs146spring2023.acls.core.TerminalApp'
+mainClassName = 'com.adrianyoungquist.core.TerminalApp'
 
 repositories {
     mavenCentral()
@@ -19,7 +19,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'sjsu.cs146spring2023.acls.core.TerminalApp'
+    mainClass = 'com.adrianyoungquist.core.TerminalApp'
 }
 
 run {

@@ -1,4 +1,4 @@
-package sjsu.cs146spring2023.acls.core;
+package com.adrianyoungquist.core;
 
 import java.util.Arrays;
 import java.util.Random;

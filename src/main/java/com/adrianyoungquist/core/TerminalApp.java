@@ -1,4 +1,4 @@
-package sjsu.cs146spring2023.acls.core;
+package com.adrianyoungquist.core;
 
 
 import javax.swing.*;
@@ -6,7 +6,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.OptionalInt;
 import java.util.Scanner;
-import javafx.stage.Stage;
 
 
 public class TerminalApp {

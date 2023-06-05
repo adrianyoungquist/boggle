@@ -1,8 +1,14 @@
-package sjsu.cs146spring2023.acls.core;
+package com.adrianyoungquist.ui;
+
+import com.adrianyoungquist.core.Game;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import com.adrianyoungquist.core.BoggleGame;
+import com.adrianyoungquist.core.DictionaryTrie;
 
 import java.util.ArrayList;
 
-public class TestingGameDriver {
+public class BoggleApp extends Application {
     public static void main(String[] args) {
         Game game = new BoggleGame();
         game.setDictionaryTrie(new DictionaryTrie("dictionary.txt"));
@@ -19,5 +25,12 @@ public class TestingGameDriver {
         System.out.println(game.getFoundWords());
         System.out.println(game.getScore());
         System.out.printf("Possible score: %d%n", game.totalPointsInBoard());
+
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.show();
     }
 }

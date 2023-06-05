@@ -1,4 +1,4 @@
-package sjsu.cs146spring2023.acls.core;/*
+package com.adrianyoungquist.core;/*
  *******************************************************************************
  * -----------------------------------------------------------------------------
  * @version1.0 03-17-2021
@@ -13,7 +13,8 @@ package sjsu.cs146spring2023.acls.core;/*
  */
 
 import java.util.*;
-import sjsu.cs146spring2023.acls.core.cs_1c.Pair;
+
+import com.adrianyoungquist.core.cs_1c.Pair;
 
 // Class Foothill --------------------------------------------------------------
 public class Foothill
@@ -150,10 +151,10 @@ class FHflowVertex<E>
    public static final int KEY_ON_DATA = 0, KEY_ON_DIST = 1;
    public static int keyType = KEY_ON_DATA;
    public static final double INFINITY = Double.MAX_VALUE;
-   public HashSet<Pair<FHflowVertex<E>, Double>> flowAdjList = 
-         new HashSet<Pair<FHflowVertex<E>, Double>>();
-   public HashSet<Pair<FHflowVertex<E>, Double>> resAdjList = 
-         new HashSet<Pair<FHflowVertex<E>, Double>>();
+   public HashSet<com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double>> flowAdjList =
+         new HashSet<com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double>>();
+   public HashSet<com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double>> resAdjList =
+         new HashSet<com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double>>();
    public E data;
    public double dist;
    public FHflowVertex<E> nextInPath; // for client-specific info
@@ -172,7 +173,7 @@ class FHflowVertex<E>
 
    public void addToFlowAdjList(FHflowVertex<E> neighbor, double cost)
    {
-      flowAdjList.add(new Pair<FHflowVertex<E>, Double>(neighbor, cost));
+      flowAdjList.add(new com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double>(neighbor, cost));
    }
 
    public void addToFlowAdjList(FHflowVertex<E> neighbor, int cost)
@@ -182,7 +183,7 @@ class FHflowVertex<E>
    
    public void addToResAdjList(FHflowVertex<E> neighbor, double cost)
    {
-      resAdjList.add(new Pair<FHflowVertex<E>, Double>(neighbor, cost));
+      resAdjList.add(new com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double>(neighbor, cost));
    }
 
    public void addToResAdjList(FHflowVertex<E> neighbor, int cost)
@@ -221,8 +222,8 @@ class FHflowVertex<E>
    // displays the flow adjacency list
    public void showFlowAdjList()
    {
-      Iterator<Pair<FHflowVertex<E>, Double>> iter;
-      Pair<FHflowVertex<E>, Double> pair;
+      Iterator<com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double>> iter;
+      com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double> pair;
 
       System.out.print("Adj flow List for " + data + ": ");
       for (iter = flowAdjList.iterator(); iter.hasNext();)
@@ -237,8 +238,8 @@ class FHflowVertex<E>
    // displays the residual adjacency list
    public void showResAdjList()
    {
-      Iterator<Pair<FHflowVertex<E>, Double>> iter;
-      Pair<FHflowVertex<E>, Double> pair;
+      Iterator<com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double>> iter;
+      com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double> pair;
 
       System.out.print("Adj res List for " + data + ":  ");
       for (iter = resAdjList.iterator(); iter.hasNext();)
@@ -420,8 +421,8 @@ class FHflowGraph<E>
    public double findMaxFlow()
    {
       double limit, flow = 0.;
-      Pair<FHflowVertex<E>, Double> pair;
-      Iterator<Pair<FHflowVertex<E>, Double>> iter;
+      com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double> pair;
+      Iterator<com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double>> iter;
       
       if (startVert == null || endVert == null)
          return -1.;
@@ -445,8 +446,8 @@ class FHflowGraph<E>
    private boolean establishNextFlowPath()
    {
       FHflowVertex<E> w, v;
-      Iterator<Pair<FHflowVertex<E>, Double >> adjIter;
-      Pair<FHflowVertex<E>, Double> pair;
+      Iterator<com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double >> adjIter;
+      com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double> pair;
       Iterator<FHflowVertex<E>> iter;
       Double costVW;
       Deque<FHflowVertex<E>> partiallyProcessedVerts = new LinkedList<FHflowVertex<E>>();
@@ -536,8 +537,8 @@ class FHflowGraph<E>
    
    private double getCostOfResEdge(FHflowVertex<E> src, FHflowVertex<E> dst)
    {
-      Iterator<Pair<FHflowVertex<E>, Double >> iter;
-      Pair<FHflowVertex<E>, Double> pair;
+      Iterator<com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double >> iter;
+      com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double> pair;
       
       if (src == null || dst == null)
          return 0.;
@@ -553,8 +554,8 @@ class FHflowGraph<E>
    private boolean addCostToResEdge(FHflowVertex<E> src, FHflowVertex<E> dst, 
          double cost)
    {
-      Iterator<Pair<FHflowVertex<E>, Double >> iter;
-      Pair<FHflowVertex<E>, Double> pair;
+      Iterator<com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double >> iter;
+      com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double> pair;
       
       if (src == null || dst == null)
          return false;
@@ -573,7 +574,7 @@ class FHflowGraph<E>
    private boolean addCostToFlowEdge(FHflowVertex<E> src, FHflowVertex<E> dst, 
          double cost)
    {
-      Iterator<Pair<FHflowVertex<E>, Double >> iter;
+      Iterator<com.adrianyoungquist.core.cs_1c.Pair<FHflowVertex<E>, Double >> iter;
       Pair<FHflowVertex<E>, Double> pair;
       
       if (src == null || dst == null)

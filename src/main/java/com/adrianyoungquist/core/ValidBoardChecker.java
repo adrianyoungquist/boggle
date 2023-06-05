@@ -1,6 +1,5 @@
-package sjsu.cs146spring2023.acls.core;
+package com.adrianyoungquist.core;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ValidBoardChecker {
