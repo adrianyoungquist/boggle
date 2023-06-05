@@ -3,7 +3,7 @@ package com.adrianyoungquist.core;
 import java.util.Arrays;
 
 public class ValidBoardChecker {
-    FHflowGraph<String> graph;
+    MaximumFlowGraph<String> graph;
     /*
     In the graph, nodes will be named L1, L2, ..., L16 and D1, D2, ..., D16 for letters and dice
      */
@@ -14,11 +14,11 @@ public class ValidBoardChecker {
     }
     public ValidBoardChecker(boolean classic) {
         dice = new Dice(classic);
-        graph = new FHflowGraph<>();
+        graph = new MaximumFlowGraph<>();
     }
     public boolean isValid(String letters, boolean classic) {
         makeGraph(letters, classic);
-        double flow = graph.findMaxFlow();
+        double flow = graph.getMaxFlow();
         return flow == Dice.NUM_DICE;
     }
 
@@ -71,7 +71,7 @@ public class ValidBoardChecker {
     }
 
     public void solve() {
-        System.out.println(graph.findMaxFlow());
+        System.out.println(graph.getMaxFlow());
     }
 
     public static void main(String[] args) {

@@ -239,7 +239,7 @@ public class MaximumFlowGraph<E extends Comparable<? super E>> {
             v1 = v2.nextInPath;
             addCostToFlowEdge(v1, v2, cost);
             addCostToResEdge(v1, v2, -cost);
-            addCostToResEdge(v1, v2, cost);
+            addCostToResEdge(v2, v1, cost);
             v2 = v1;
         }
         return true;
