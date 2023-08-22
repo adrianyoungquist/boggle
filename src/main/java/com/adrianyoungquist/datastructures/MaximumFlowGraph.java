@@ -1,8 +1,10 @@
-package com.adrianyoungquist.core;
+package com.adrianyoungquist.datastructures;
 
 /*
 Uses Ford-Fulkerson algorithm
  */
+
+import com.adrianyoungquist.utils.Pair;
 
 import java.util.*;
 

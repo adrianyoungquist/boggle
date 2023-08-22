@@ -1,8 +1,12 @@
-package com.adrianyoungquist.core;
+package com.adrianyoungquist.model;
+
+import com.adrianyoungquist.datastructures.AbstractWordBuilder;
+import com.adrianyoungquist.datastructures.AlphaTrieNode;
+import com.adrianyoungquist.datastructures.DictionaryTrie;
+import com.adrianyoungquist.utils.WordLengthComparator;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class BoggleBoard extends Board {
     public static final int DEFAULT_DIM = 4;
@@ -136,7 +140,7 @@ public class BoggleBoard extends Board {
         if (dictionaryTrie.size() == 0) {
             dictionaryTrie.buildTrieFromFile();
         }
-        WordBuilder wb = new WordBuilder();
+        BoggleWordBuilder wb = new BoggleWordBuilder();
         Set<String> found = new HashSet<>();
         solveHelper(dictionaryTrie.getRoot(), wb, found);
         solved = true;
@@ -178,11 +182,11 @@ public class BoggleBoard extends Board {
             System.out.println("Not alphanumeric");
             return false;
         }
-        WordBuilder wb = new WordBuilder();
+        BoggleWordBuilder wb = new BoggleWordBuilder();
         return wordIsValid(word, 0, wb);
     }
 
-    private boolean wordIsValid(String word, int index, WordBuilder wb) {
+    private boolean wordIsValid(String word, int index, BoggleWordBuilder wb) {
         if (index == word.length()) {
             return true;
         }
@@ -232,8 +236,8 @@ public class BoggleBoard extends Board {
         return sb.substring(0, sb.length() - 1);
     }
 
-    public WordBuilder getWordBuilder() {
-        return new WordBuilder();
+    public BoggleWordBuilder getWordBuilder() {
+        return new BoggleWordBuilder();
     }
 
     private void randomDiceOrderFisherYates() {
@@ -259,11 +263,11 @@ public class BoggleBoard extends Board {
         return dice.get(dieAtIndexList[index]);
     }
 
-    private void solveHelper(AlphaTrieNode node, WordBuilder wb, Set<String> words) {
+    private void solveHelper(AlphaTrieNode node, BoggleWordBuilder wb, Set<String> words) {
         if (node == null) {
             return;
         }
-        if (wb.stackSize >= minWordLength && node.isWord()) {
+        if (wb.getStackSize() >= minWordLength && node.isWord()) {
             words.add(wb.word());
         }
 
@@ -303,108 +307,52 @@ public class BoggleBoard extends Board {
         }
         return true;
     }
-    class WordBuilder {
-        private final int[][] NEIGHBORS = new int[][]{
-                {1, 4, 5},                      // 0
-                {0, 2, 4, 5, 6},                // 1
-                {1, 3, 5, 6, 7},                // 2
-                {2, 6, 7},                      // 3
-                {0, 1, 5, 8, 9},                // 4
-                {0, 1, 2, 4, 6, 8, 9, 10},      // 5
-                {1, 2, 3, 5, 7, 9, 10, 11},     // 6
-                {2, 3, 6, 10, 11},              // 7
-                {4, 5, 9, 12, 13},              // 8
-                {4, 5, 6, 8, 10, 12, 13, 14},   // 9
-                {5, 6, 7, 9, 11, 13, 14, 15},   // 10
-                {6, 7, 10, 14, 15},             // 11
-                {8, 9, 13},                     // 12
-                {8, 9, 10, 12, 14},             // 13
-                {9, 10, 11, 13, 15},            // 14
-                {10, 11, 14}                    // 15
+
+    class BoggleWordBuilder extends AbstractWordBuilder {
+        public static final int[][] NEIGHBOR_LIST = new int[][]{
+            {1, 4, 5},                      // 0
+            {0, 2, 4, 5, 6},                // 1
+            {1, 3, 5, 6, 7},                // 2
+            {2, 6, 7},                      // 3
+            {0, 1, 5, 8, 9},                // 4
+            {0, 1, 2, 4, 6, 8, 9, 10},      // 5
+            {1, 2, 3, 5, 7, 9, 10, 11},     // 6
+            {2, 3, 6, 10, 11},              // 7
+            {4, 5, 9, 12, 13},              // 8
+            {4, 5, 6, 8, 10, 12, 13, 14},   // 9
+            {5, 6, 7, 9, 11, 13, 14, 15},   // 10
+            {6, 7, 10, 14, 15},             // 11
+            {8, 9, 13},                     // 12
+            {8, 9, 10, 12, 14},             // 13
+            {9, 10, 11, 13, 15},            // 14
+            {10, 11, 14}                    // 15
         };
-
-        boolean[] used; // whether a letter at a position has already been used in a word
-
-        int[] letterStack; // will give the word, and letters can be popped off and pushed on
-
-        int currentPosition;
-        int stackSize;
-
-        public WordBuilder() {
-            used = new boolean[dim * dim];
-            letterStack = new int[dim * dim];
-            currentPosition = 0;
-            stackSize = 0;
+        BoggleWordBuilder() {
+            super(dim * dim);
         }
 
-        public boolean push(int location) {
-            if (used[location])
-                return false;
-            if (stackSize > 0 && Arrays.stream(NEIGHBORS[currentPosition]).noneMatch(num -> num == location)) { // not adjacent
-                return false;
-            }
-            letterStack[stackSize++] = location; // can never overflow because there aren't duplicates
-            currentPosition = location;
-            used[location] = true;
-            return true;
+        @Override
+        protected char letterAtIndex(int letterIndex) {
+            return dice.get(dieAtIndexList[letterIndex]).getValue();
         }
 
-        public int pop() {
-            if (stackSize == 0) {
-                throw new NoSuchElementException("Stack is empty");
-            }
-            stackSize--;
-            int ret = letterStack[stackSize];
-            if (stackSize != 0) {
-                currentPosition = letterStack[stackSize - 1];
-            }
-            used[ret] = false;
-            return ret;
+        @Override
+        protected int[] currentPositionNeighbors() {
+            return NEIGHBOR_LIST[currentPosition];
         }
 
-        public void reset() {
-            for (int i = 0; i < dim * dim; i++) {
-                used[i] = false;
-            }
-            stackSize = 0;
-            currentPosition = 0;
-        }
-
+        @Override
         public String word() {
             StringBuilder sb = new StringBuilder();
             char c;
             for (int i = 0; i < stackSize; i++) {
-                c = dieFromStackIndex(i).getValue();
+                c = letterAtIndex(letterStack[i]);
                 sb.append(c);
                 if (c == 'q') {
                     sb.append('u');
                 }
             }
             return sb.toString();
-        }
-
-        public int[] validNext() {
-            if (stackSize == 0) {
-                return IntStream.range(0, dim * dim).toArray();
-            }
-            return Arrays.stream(NEIGHBORS[currentPosition]).filter(num -> !used[num]).toArray();
-        }
-
-        private Die dieFromStackIndex(int index) {
-            return dice.get(dieAtIndexList[letterStack[index]]);
-        }
-
-        @Override
-        public String toString() {
-            if (stackSize == 0) {
-                return "empty wordBuilder";
-            }
-            StringBuilder sb = new StringBuilder();
-            sb.append("wb: ");
-            for (int i = 0; i < stackSize; i++) {
-                sb.append(letterStack[i]).append(": ").append(dieFromStackIndex(i)).append(", ");
-            }
-            return sb.substring(0, sb.length() - 2);
         }
     }
 }

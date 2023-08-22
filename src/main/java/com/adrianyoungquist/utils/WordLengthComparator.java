@@ -1,4 +1,4 @@
-package com.adrianyoungquist.core;
+package com.adrianyoungquist.utils;
 
 import java.util.Comparator;
 

@@ -1,5 +1,8 @@
-package com.adrianyoungquist.core;
+package com.adrianyoungquist.service;
 
+
+import com.adrianyoungquist.model.BoggleGame;
+import com.adrianyoungquist.model.Game;
 
 import javax.swing.*;
 import java.awt.*;

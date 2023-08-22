@@ -1,4 +1,6 @@
-package com.adrianyoungquist.core;
+import com.adrianyoungquist.model.BoggleGame;
+import com.adrianyoungquist.datastructures.DictionaryTrie;
+import com.adrianyoungquist.model.Game;
 
 import java.util.ArrayList;
 

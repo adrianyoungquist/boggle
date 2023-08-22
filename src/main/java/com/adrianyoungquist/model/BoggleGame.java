@@ -1,4 +1,7 @@
-package com.adrianyoungquist.core;
+package com.adrianyoungquist.model;
+
+import com.adrianyoungquist.datastructures.DictionaryTrie;
+import com.adrianyoungquist.utils.WordLengthComparator;
 
 import java.util.ArrayList;
 import java.util.Random;

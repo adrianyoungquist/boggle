@@ -1,4 +1,4 @@
-package com.adrianyoungquist.core;
+package com.adrianyoungquist.datastructures;
 
 import java.io.*;
 

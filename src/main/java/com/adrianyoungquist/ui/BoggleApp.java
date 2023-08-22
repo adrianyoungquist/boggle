@@ -1,10 +1,10 @@
 package com.adrianyoungquist.ui;
 
-import com.adrianyoungquist.core.Game;
+import com.adrianyoungquist.model.Game;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import com.adrianyoungquist.core.BoggleGame;
-import com.adrianyoungquist.core.DictionaryTrie;
+import com.adrianyoungquist.model.BoggleGame;
+import com.adrianyoungquist.datastructures.DictionaryTrie;
 
 import java.util.ArrayList;
 

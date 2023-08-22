@@ -1,6 +1,4 @@
-package com.adrianyoungquist.analysis;
-
-import com.adrianyoungquist.core.DictionaryTrie;
+import com.adrianyoungquist.datastructures.DictionaryTrie;
 
 import java.util.ArrayList;
 
@@ -16,8 +14,8 @@ public class AnalyzeTrie {
 
         TimeContains timeContains = new TimeContains();
 
-        long trieTime = timeContains.timeTrie(trie, toFind, 1000);
-        long listTime = timeContains.timeList(list, toFind, 1000);
+        long trieTime = timeContains.timeTrie(trie, toFind, 50);
+        long listTime = timeContains.timeList(list, toFind, 50);
 
         return new long[]{trieTime, listTime};
     }
@@ -44,8 +42,8 @@ public class AnalyzeTrie {
     }
 
     public static void main(String[] args) {
-        //long[] times = analyzeContains();
-        //System.out.printf("Times: trie=%d, list=%d%n", times[0], times[1]);
+        long[] times = analyzeContains();
+        System.out.printf("Times: trie=%d, list=%d%n", times[0], times[1]);
         // result for toFind=dictionary.txt, reps=1000, search for word and word + "e":
         // Trie: 22244, list: 51412
         double[] ratios = letterCountRatio();

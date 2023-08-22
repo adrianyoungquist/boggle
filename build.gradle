@@ -7,7 +7,7 @@ plugins {
 
 group 'com.adrianyoungquist'
 version '1.0-SNAPSHOT'
-mainClassName = 'com.adrianyoungquist.core.TerminalApp'
+mainClassName = 'com.adrianyoungquist.service.TerminalApp'
 
 repositories {
     mavenCentral()
@@ -19,7 +19,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'com.adrianyoungquist.core.TerminalApp'
+    mainClass = 'com.adrianyoungquist.service.TerminalApp'
 }
 
 run {

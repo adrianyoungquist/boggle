@@ -1,4 +1,4 @@
-package com.adrianyoungquist.core;
+import com.adrianyoungquist.model.Board;
 
 import java.util.ArrayList;
 import java.util.Collections;
